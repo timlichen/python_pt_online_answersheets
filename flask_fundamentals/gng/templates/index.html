@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Great Number Game</title>
+    <style>
+        #hi, #low, #got_it {
+            height: 100px;
+            width: 100px;
+        }
+        #hi, #low { background-color: red} 
+        #got_it { background-color: green} 
+    </style>
 </head>
 <body>
     <h1>Welcome to the Great Number Game!</h1>
@@ -16,6 +24,13 @@
     <div id="low">Too Low</div>
     {% elif session['result'] == 'got_it' %}
     <div id="got_it">{{  session['server_number']}} was the number</div>
+        <form action="/leader_board" method="POST">
+            <p>Name: <input type="text" name="name"></p>
+            <input type="submit" value="Submit">
+        </form>
+    <a href="/play_again"><button>Play Again!</button></a>
+    {% elif session['result'] == 'you_lose' %}
+    <div id="you_lose">You Lose!</div>
     <a href="/play_again"><button>Play Again!</button></a>
     {% endif %}
 
@@ -24,5 +39,6 @@
         <input type="submit" value="Submit">
     </form>
     
+<a href='/board'>Leader Board</a>
 </body>
 </html>
