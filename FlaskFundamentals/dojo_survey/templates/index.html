@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dojo Survey index</title>
+</head>
+<body>
+    <form action="/survey" method="POST">
+        <p>Your Name: <input type="text" name="name"></p>
+        <p>Dojo Location: 
+            <select name="location">
+                <option value="San Jose">San Jose</option>
+                <option value="Seattle">Seattle</option>
+                <option value="Tulsa">Tulsa</option>
+                <option value="Online">Online</option>
+            </select>
+        </p>
+        <p>Favorite Language:
+            <select name="language">
+                <option value="Python">Python</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Go">Go</option>
+                <option value="Fortran">Fortran</option>
+            </select>
+        </p>
+        <p>Favorite Colors:
+            <input type="checkbox" name="color" value="Blue">Blue<br>
+            <input type="checkbox" name="color" value="Green">Green<br>
+            <input type="checkbox" name="color" value="Red">Red<br>
+        </p>
+        <p>Favorite Food:
+            <input type="radio" name="food" value="Spaghetti" checked> Spaghetti<br>
+            <input type="radio" name="food" value="Ravioli"> Ravioli<br>
+            <input type="radio" name="food" value="Gnocchi"> Gnocchi
+        </p>
+        <p>Comment (optional): <input type="text" name="comment"></p>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
