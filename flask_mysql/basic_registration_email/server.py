@@ -1,7 +1,10 @@
+import re
+
 from flask import Flask, render_template, redirect, flash, request
 from mysqlconnection import connectToMySQL
 app = Flask(__name__)
 app.secret_key = "carnitas"
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 @app.route("/")
 def index():
@@ -28,12 +31,19 @@ def register_user():
     if not request.form['ln'].isalpha():
         is_valid = False
         flash("First name can only contain alphabetic chracters")
-
+    if len(request.form['email']) < 1:
+        is_valid = False
+        flash("Email cannot be blank!")
+    if not EMAIL_REGEX.match(request.form['email']):
+        is_valid = False
+        flash("Invalid Email Address!")
+        
     if is_valid:
-        query = "INSERT INTO user (first_name, last_name, password) VALUES (%(fn)s, %(ln)s, %(pw)s)"
+        query = "INSERT INTO user (first_name, last_name, email, password) VALUES (%(fn)s, %(ln)s, %(em)s, %(pw)s)"
         data = {
             'fn': request.form['fn'],
             'ln': request.form['ln'],
+            'em': request.form['email'],
             'pw': request.form['password']
         }
         mysql = connectToMySQL('basic_registration')
