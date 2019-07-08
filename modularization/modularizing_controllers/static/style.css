@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+.container {
+    padding: 25px;
+}
+form {
+    display: inline-block;
+    width: 40%;
+    margin: 5px;
+}
+form div {
+    margin: 10px 0;
+}
+fieldset {
+    padding: 10px;
+}
+legend {
+    padding: 5px;
+    font-style: italic;
+    font-size: 1.1em;
+}
+label {
+    display: inline-block;
+    width: 80px;
+}
+input[type="submit"] {
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 5px;
+}
+section {
+    padding: 15px;
+}
+h2 {
+    margin: 5px;
+}
+ul {
+    margin: 5px 25px 10px 25px;
+}
