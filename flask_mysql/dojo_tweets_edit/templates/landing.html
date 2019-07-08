@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Welcome {{user.fname}}!</h1>
+    <a href="/logout">Logout</a>
+    <hr>
+    <form action="/tweets/create" method="POST">
+        <p>Write a tweet: <input type="text" name="content"></p>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{message}}</p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <hr>
+
+    {% for tweet in tweets %}
+    <p>{{tweet.fname}} says:</p>
+    <p>{{tweet.content}}</p>
+    posted
+    {% if tweet.time_since_posted[0] %}
+        {{tweet.time_since_posted[0]}} days
+    {% elif tweet.time_since_posted[1] %}
+        {{tweet.time_since_posted[1]}} hours
+    {% elif tweet.time_since_posted[2] %}
+        {{tweet.time_since_posted[2]}} minutes
+    {% else %}
+        less than a minute
+    {% endif%}
+    ago
+    {% if tweet.already_liked %}
+    <a href='/tweets/{{tweet.tweet_id}}/unlike'><button>Unlike Tweet</button></a>
+    {% else %}
+    <a href='/tweets/{{tweet.tweet_id}}/add_like'><button>Like Tweet</button></a>
+    {% endif %}
+
+    {% if session['user_id'] == tweet.users_id %}
+    <a href='/tweets/{{tweet.tweet_id}}/delete'><button>Delete Tweet</button></a>
+    <a href='/tweets/{{tweet.tweet_id}}/edit'><button>Edit Tweet</button></a>
+    {% endif %}
+    <p>This tweet has been liked {{tweet.times_liked}} times.</p>
+    {% endfor %}
+
+</body>
+</html>
