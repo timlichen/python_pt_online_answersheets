@@ -98,30 +98,47 @@ def landing():
     user = mysql.query_db(query, data)
 
     mysql = connectToMySQL('dojo_tweets')
-    query = "SELECT tweets.users_id, tweets.id as tweet_id, users.fname, tweets.content, tweets.created_at, tweets.content, COUNT(tweets_id) as times_liked FROM liked_tweets RIGHT JOIN tweets ON tweets.id = liked_tweets.tweets_id JOIN users ON tweets.users_id = users.id  GROUP BY tweets_id ORDER BY tweets.created_at DESC"
-    tweets = mysql.query_db(query)
-    
-    mysql = connectToMySQL('dojo_tweets')
-    query = "SELECT * FROM liked_tweets WHERE users_id = %(user_id)s"
-    data = {
-        'user_id': session['user_id']
-    }
-    liked_tweets = [tweet['tweets_id'] for tweet in mysql.query_db(query, data)]
-    print(tweets)
-    for tweet in tweets:
-        print(datetime.now())
-        time_since_posted = datetime.now() - tweet['created_at']
-        days = time_since_posted.days
-        hours = time_since_posted.seconds//3600 
-        minutes = (time_since_posted.seconds//60)%60
-        if tweet['tweet_id'] in liked_tweets:
-            tweet['already_liked'] = True
-        else:
-            tweet['already_liked'] = False
+    query = "SELECT user_being_followed FROM followed_users WHERE user_following = %(id)s"
+    data = {'id': session['user_id']}
+    followed_users = [user['user_being_followed'] for user in mysql.query_db(query, data)]
 
-        tweet['time_since_posted'] = (days, hours, minutes)
-                                     
-    return render_template("landing.html", user=user[0], tweets=tweets)
+
+    if followed_users:
+
+        mysql = connectToMySQL('dojo_tweets')
+        query = "SELECT * FROM users WHERE users.id = %(id)s"
+        data = {'id': session['user_id']}
+        user = mysql.query_db(query, data)
+        
+        mysql = connectToMySQL('dojo_tweets')
+        query = "SELECT tweets.users_id, tweets.id as tweet_id, users.fname, tweets.content, tweets.created_at, tweets.content, COUNT(tweets_id) as times_liked FROM liked_tweets RIGHT JOIN tweets ON tweets.id = liked_tweets.tweets_id JOIN users ON tweets.users_id = users.id WHERE tweets.users_id IN %(followed_users)s GROUP BY tweets_id ORDER BY tweets.created_at DESC"
+        data = {'followed_users' : tuple(followed_users)}
+        tweets = mysql.query_db(query, data)
+        
+        mysql = connectToMySQL('dojo_tweets')
+        query = "SELECT * FROM liked_tweets WHERE users_id = %(user_id)s"
+        data = {
+            'user_id': session['user_id']
+        }
+        liked_tweets = [tweet['tweets_id'] for tweet in mysql.query_db(query, data)]
+
+        for tweet in tweets:
+            print(datetime.now())
+            time_since_posted = datetime.now() - tweet['created_at']
+            days = time_since_posted.days
+            hours = time_since_posted.seconds//3600 
+            minutes = (time_since_posted.seconds//60)%60
+            
+            if tweet['tweet_id'] in liked_tweets:
+                tweet['already_liked'] = True
+            else:
+                tweet['already_liked'] = False
+
+            tweet['time_since_posted'] = (days, hours, minutes)
+                                        
+        return render_template("landing.html", user=user[0], tweets=tweets)
+
+    return render_template("landing.html", user=user[0], tweets=[])
 
 @app.route("/tweets/create", methods=['POST'])
 def save_tweet():
@@ -218,6 +235,54 @@ def update_tweet(tweet_id):
         return redirect("/success")
     else:
        return redirect("/tweets/{}/edit".format(tweet_id)) 
+
+@app.route("/users")
+def show_users():
+    query = "SELECT * FROM users WHERE id <> %(id)s ORDER BY lname ASC"
+    mysql = connectToMySQL('dojo_tweets')
+    data = {
+        'id': session['user_id']
+    }
+    users = mysql.query_db(query, data)
+
+    mysql = connectToMySQL('dojo_tweets')
+    query = "SELECT user_being_followed FROM followed_users WHERE user_following = %(id)s"
+    data = {'id': session['user_id']}
+    followed_users = [user['user_being_followed'] for user in mysql.query_db(query, data)]
+
+    return render_template('users.html', users = users, followed_users = followed_users)
+
+@app.route("/follow/<user_id>")
+def follow_user(user_id):
+    query = "INSERT INTO followed_users (user_following, user_being_followed) VALUES (%(uid)s, %(uid2)s)"
+    mysql = connectToMySQL('dojo_tweets')
+    data = {
+        'uid': session['user_id'],
+        'uid2': user_id
+    }
+    mysql.query_db(query, data)
+    return redirect("/success")
+
+@app.route("/unfollow/<user_id>")
+def unfollow_user(user_id):
+    query = "DELETE FROM followed_users WHERE user_following = %(uid)s AND user_being_followed = %(uid2)s"
+    data = {
+        'uid': session['user_id'],
+        'uid2': int(user_id)
+    }
+    mysql = connectToMySQL('dojo_tweets')
+    mysql.query_db(query, data)
+    return redirect("/success")
+
+@app.route("/follwed_users")
+def followed_users():
+    query = "SELECT followed_users.user_following, being_followed.fname, being_followed.lname FROM followed_users LEFT JOIN users on followed_users.user_following = users.id LEFT JOIN users as being_followed on followed_users.user_being_followed = being_followed.id WHERE followed_users.user_following = %(uid)s"
+    data = {
+        'uid': session['user_id'],
+    }
+    mysql = connectToMySQL('dojo_tweets')
+    followed_users = mysql.query_db(query, data)
+    return render_template("/followed_users.html", followed_users=followed_users)
 
 
 if __name__ == "__main__":
