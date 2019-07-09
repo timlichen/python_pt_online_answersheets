@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.container {
+    padding: 25px;
+}
+form {
+    display: inline-block;
+    width: 45%;
+    margin: 5px;
+    vertical-align: top;
+}
+fieldset {
+    padding: 10px;
+}
+legend {
+    padding: 5px;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+label {
+    display: inline-block;
+    width: 100px;
+}
+input {
+    margin: 10px 0;
+    padding: 3px;
+    border-radius: 1px;
+    width: 300px;
+}
+input[type="submit"] {
+    display: block;
+    width: fit-content;
+    margin: 10px auto;
+    padding: 5px;
+    border-radius: 5px;
+}
+.error {
+    color: red;
+    font-style: italic;
+}
+h1 {
+   display: inline-block;
+   width: fit-content; 
+}
+a {
+    display: inline-block;
+    width: 75%;
+    text-align: right;
+    vertical-align: top;
+}
