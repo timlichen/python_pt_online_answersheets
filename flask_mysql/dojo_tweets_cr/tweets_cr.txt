@@ -1,0 +1,35 @@
+# Done
+    user db (schema, table (user))
+    lr - app(flask)
+
+1. set up our database
+    a. schema
+    b. tables, column names
+    c. fwd. eng. to DB server
+    d. replace schema in connectToMySql('new_schema')
+
+2. test connect with DB (new schema)
+    a. register - login (save in to session the user_id)
+    b. make sure we get the success page
+
+3. Set up from/sucess page and post route
+    a. query for user, send that in GET request to render the form
+    b. altering success page to include form to submit tweets
+    c. create POST route associated with form "/tweets/create"
+    d. print request.form['name'] + redirect(/success)
+
+4.  Validate request.form data, tweet content
+    a. set up flash messages
+    b. if validations pass, commit to DB with session['user_id'] as FK for tweet author
+    c. redirect back to /success
+
+5. Show tweets from DB
+    a. build out HTML/Jinja2 to display tweets from DB
+        - name variable pass through render_template('success.html', tweets = tweets)
+        - for loop over tweets {% for tweet in tweets %}
+    b. modify method decorated by /success to get tweet data from DB and pass through render_template method
+        - connect to mysql DB
+        - write query SELECT * FROM tweets ORDER
+        - run query
+        - pass result into render_template
+    
