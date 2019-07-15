@@ -1,0 +1,10 @@
+{% if users %}
+    <ul>
+        {% for user in users %}
+            <li>{{user.username}}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="error">No users with that username exist.</p>
+{% endif %}
+

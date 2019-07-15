@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.container, section {
+    padding: 25px;
+}
+form {
+    display: inline-block;
+    width: 45%;
+    margin: 5px;
+    vertical-align: top;
+}
+fieldset {
+    padding: 10px;
+}
+legend {
+    padding: 5px;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+label {
+    display: inline-block;
+    width: 100px;
+}
+input {
+    margin: 10px 0;
+    width: 300px;
+    padding: 5px;
+    border: 1px solid hsl(0, 0%, 60%);
+    border-radius: 4px;
+}
+input[type="submit"] {
+    display: block;
+    width: fit-content;
+    margin: 10px auto;
+    padding: 5px;
+    border-radius: 5px;
+}
+input[name="name"] {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+span {
+    border: 1px solid hsl(0, 0%, 60%);
+    border-radius: 4px;
+    padding: 5px;
+    margin: 5px 0;
+    display: inline-block;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: hsl(0, 0%, 60%);
+}
+::-moz-placeholder { /* Firefox 19+ */
+    color: hsl(0, 0%, 60%);
+}
+:-ms-input-placeholder { /* IE 10+ */
+    color: hsl(0, 0%, 60%);
+}
+:-moz-placeholder { /* Firefox 18- */
+    color: hsl(0, 0%, 60%);
+}
+.fa-search {
+    color: hsl(0, 0%, 60%);
+}
+.error, .success, .search {
+    font-style: italic;
+    font-weight: bold;
+}
+.error {
+    color: red;
+}
+.success {
+    color: green;
+}
+h1 {
+   display: inline-block;
+   width: fit-content; 
+}
+a {
+    display: inline-block;
+    width: 75%;
+    text-align: right;
+    vertical-align: top;
+}
+ul {
+    margin-left: 25px;
+    list-style: none;
+}
