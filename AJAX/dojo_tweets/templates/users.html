@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>All Users</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in all_users %}
+                <tr>
+                    <td>
+                        {{user.user_name}}
+                    </td>
+                    <td>
+                        <a href="/follow/{{user.id}}">Follow</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

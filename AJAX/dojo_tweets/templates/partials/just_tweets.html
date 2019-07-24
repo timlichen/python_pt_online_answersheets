@@ -1,0 +1,9 @@
+{% for tweet in followed_tweets %}
+    <p>{{tweet.tweet_content}}</p>
+    <form action="/tweets/{{tweet.id}}/delete", method='POST'>
+        <input type="submit" value="Delete">
+    </form>
+    <form action="/tweets/{{tweet.id}}/like", method='POST'>
+        <input type="submit" value="Like">
+    </form>
+{% endfor %}
