@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+    <title>Checkerboard</title>
+</head>
+
+<body>
+    <div class="container">
+        <table>
+            {% for i in range(num_rows) %}
+            <tr>
+                {% for j in range(num_cols) %}
+                <td class="color{{ (i+j)%2+1 }}"></td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>
