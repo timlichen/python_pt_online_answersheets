@@ -9,6 +9,14 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="{{url_for('static', filename='script.js')}}"></script>
     <title>Checkerboard</title>
+    <style>
+        .color1 {
+            background-color: {{color2}};
+        }
+        .color2 {
+            background-color: {{color1}};
+        }
+    </style>
 </head>
 
 <body>
