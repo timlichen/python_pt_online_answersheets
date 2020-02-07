@@ -1,0 +1,22 @@
+{% for tweet in tweet_data %}
+    <p>{{tweet.author.first_name}} wrote: {{tweet.content}}</p>
+    {% if tweet['time_since_secs'] %}
+    <p>{{tweet['time_since_secs']}} seconds</p>
+    {% elif tweet['time_since_minutes'] %}
+    <p>{{tweet['time_since_minutes']}} minutes</p>
+    {% elif tweet['time_since_hours'] %}
+    <p>{{tweet['time_since_hours']}} hours</p>
+    {% elif tweet['time_since_days']%}
+    <p>{{tweet['time_since_days']}} days</p>
+    {% endif %}
+    <p>Tweet has been liked: {{tweet['like_count']}} times.</p>
+    {% if tweet in liked_tweets %}
+    <p><a href="/unlike_tweet/{{tweet.id}}"><button>Unlike This Tweet</button></a></p>
+    {% else %}
+    <p><a href="/like_tweet/{{tweet.id}}"><button>Like This Tweet</button></a></p>
+    {% endif %}
+    {% if tweet.author_id == session['user_id'] %}
+    <p><a href="/delete_tweet/{{tweet.id}}"><button>Delete This Tweet</button></a></p>
+    {% endif %}
+    <a href="/tweet_details/{{tweet.id}}"><button>Details</button></a>
+{% endfor %}

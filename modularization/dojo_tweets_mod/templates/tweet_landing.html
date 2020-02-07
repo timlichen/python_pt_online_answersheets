@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Hello {{user_data['first_name']}}!</h1>
+    <a href="/logout">Logout</a>
+    <a href="/users_to_follow">Follow some users!</a>
+    <a href="/followers">Users you are follwing</a>
+    
+    {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+    {% if messages %}                            <!-- check if there are any messages -->
+    {% for message in messages %}            <!-- loop through the messages -->
+    <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form action="/process_tweet" id="tweet_form" method="POST">
+        <p>Write a Tweet: <input type="text" name="tweet_content"></p>
+        <input type="submit" value="Post Tweet">
+    </form>
+
+    <hr>
+    <div class="tweet_body">
+    {% for tweet in tweet_data %}
+        <p>{{tweet.author.first_name}} wrote: {{tweet.content}}</p>
+        {% if tweet['time_since_secs'] %}
+        <p>{{tweet['time_since_secs']}} seconds</p>
+        {% elif tweet['time_since_minutes'] %}
+        <p>{{tweet['time_since_minutes']}} minutes</p>
+        {% elif tweet['time_since_hours'] %}
+        <p>{{tweet['time_since_hours']}} hours</p>
+        {% elif tweet['time_since_days']%}
+        <p>{{tweet['time_since_days']}} days</p>
+        {% endif %}
+        <div>
+        <p class="older_p_bro">Tweet has been liked: <span class="tweet_count">{{tweet['like_count']}}</span> times.</p>
+        {% if tweet in liked_tweets %}
+        <p><a href="/unlike_tweet/{{tweet.id}}"><button>Unlike This Tweet</button></a></p>
+        {% else %}
+        <p><a class="like_link" href="/like_tweet/{{tweet.id}}"><button>Like This Tweet</button></a></p>
+        {% endif %}
+        </div>
+        {% if tweet.author_id == session['user_id'] %}
+        <p><a href="/delete_tweet/{{tweet.id}}"><button>Delete This Tweet</button></a></p>
+        {% endif %}
+        <a href="/tweet_details/{{tweet.id}}"><button>Details</button></a>
+    {% endfor %}
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        $("#tweet_form").submit(function(){
+            $.ajax({
+                url: '/process_tweet',
+                method: 'POST',
+                data: $('#tweet_form').serialize()
+            })
+            .done(function(response){
+                $('.tweet_body').append(response)
+            })
+            return false
+        })
+        
+        function rebuildTweetBody(){
+            $.ajax({
+                url: '/tweets_landing_v2',
+                method: 'GET',
+            })
+            .done(function(response){
+                $('.tweet_body').html(response)
+            })
+        }
+        setInterval(rebuildTweetBody, 500)
+
+        $(".like_link").click(function(e){
+            console.log($(this).parent().siblings('.older_p_bro').children('.tweet_count').css("background", "yellow" ))
+            return false
+            // $.ajax({
+            //     url: '/process_tweet',
+            //     method: 'POST',
+            //     data: $('#tweet_form').serialize()
+            // })
+            // .done(function(response){
+            //     $('.tweet_body').append(response)
+            // })
+            // return false
+        })
+
+
+
+    })
+</script>
